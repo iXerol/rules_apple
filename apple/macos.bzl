@@ -26,6 +26,10 @@ load(
     _macos_unit_test_bundle = "macos_unit_test_bundle",
 )
 load(
+    "@build_bazel_rules_apple//apple/internal:apple_product_type.bzl",
+    "apple_product_type",
+)
+load(
     "@build_bazel_rules_apple//apple/internal:binary_support.bzl",
     "binary_support",
 )
@@ -57,6 +61,7 @@ def macos_application(name, **kwargs):
     bundling_args = binary_support.add_entitlements_and_swift_linkopts(
         name,
         platform_type = str(apple_common.platform_type.macos),
+        product_type = apple_product_type.application,
         features = features,
         **binary_args
     )
@@ -75,6 +80,7 @@ def macos_bundle(name, **kwargs):
     bundling_args = binary_support.add_entitlements_and_swift_linkopts(
         name,
         platform_type = str(apple_common.platform_type.macos),
+        product_type = apple_product_type.bundle,
         features = features,
         **binary_args
     )
@@ -89,6 +95,7 @@ def macos_quick_look_plugin(name, **kwargs):
     bundling_args = binary_support.add_entitlements_and_swift_linkopts(
         name,
         platform_type = str(apple_common.platform_type.macos),
+        product_type = apple_product_type.quicklook_plugin,
         include_entitlements = False,
         **kwargs
     )
@@ -107,6 +114,7 @@ def macos_kernel_extension(name, **kwargs):
     bundling_args = binary_support.add_entitlements_and_swift_linkopts(
         name,
         platform_type = str(apple_common.platform_type.macos),
+        product_type = apple_product_type.kernel_extension,
         features = features,
         **binary_args
     )
@@ -121,6 +129,7 @@ def macos_spotlight_importer(name, **kwargs):
     bundling_args = binary_support.add_entitlements_and_swift_linkopts(
         name,
         platform_type = str(apple_common.platform_type.macos),
+        product_type = apple_product_type.spotlight_importer,
         **kwargs
     )
 
@@ -136,6 +145,7 @@ def macos_xpc_service(name, **kwargs):
     bundling_args = binary_support.add_entitlements_and_swift_linkopts(
         name,
         platform_type = str(apple_common.platform_type.macos),
+        product_type = apple_product_type.xpc_service,
         **binary_args
     )
 
@@ -194,6 +204,7 @@ def macos_command_line_application(name, **kwargs):
     cmd_line_app_args = binary_support.add_entitlements_and_swift_linkopts(
         name,
         platform_type = str(apple_common.platform_type.macos),
+        product_type = apple_product_type.tool,
         link_swift_statically = True,
         include_entitlements = False,
         deps = binary_deps,
@@ -245,6 +256,7 @@ def macos_dylib(name, **kwargs):
     dylib_args = binary_support.add_entitlements_and_swift_linkopts(
         name,
         platform_type = str(apple_common.platform_type.macos),
+        product_type = apple_product_type.dylib,
         link_swift_statically = True,
         include_entitlements = False,
         deps = binary_deps,
@@ -266,6 +278,7 @@ def macos_extension(name, **kwargs):
     bundling_args = binary_support.add_entitlements_and_swift_linkopts(
         name,
         platform_type = str(apple_common.platform_type.macos),
+        product_type = apple_product_type.app_extension,
         features = features,
         **binary_args
     )

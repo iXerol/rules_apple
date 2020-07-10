@@ -78,31 +78,50 @@ def _apple_verification_test_impl(ctx):
 
     # Should be using split_attr instead, but it has been disabled due to
     # https://github.com/bazelbuild/bazel/issues/8633
-    bundle_info = ctx.attr.target_under_test[0][AppleBundleInfo]
-    archive = bundle_info.archive
-    verifier_script = ctx.file.verifier_script
+    target_under_test = ctx.attr.target_under_test[0]
+    if AppleBundleInfo in target_under_test:
+        bundle_info = target_under_test[AppleBundleInfo]
+        archive = bundle_info.archive
+        verifier_script = ctx.file.verifier_script
 
-    bundle_with_extension = bundle_info.bundle_name + bundle_info.bundle_extension
+        bundle_with_extension = bundle_info.bundle_name + bundle_info.bundle_extension
 
-    if bundle_info.platform_type in [
-        "ios",
-        "tvos",
-    ] and bundle_info.product_type in [
-        apple_product_type.application,
-        apple_product_type.messages_application,
-    ]:
-        archive_relative_bundle = paths.join("Payload", bundle_with_extension)
-    else:
-        archive_relative_bundle = bundle_with_extension
+        if bundle_info.platform_type in [
+            "ios",
+            "tvos",
+        ] and bundle_info.product_type in [
+            apple_product_type.application,
+            apple_product_type.app_clip,
+            apple_product_type.messages_application,
+        ]:
+            archive_relative_bundle = paths.join("Payload", bundle_with_extension)
+        else:
+            archive_relative_bundle = bundle_with_extension
 
-    if bundle_info.platform_type == "macos":
-        archive_relative_contents = paths.join(archive_relative_bundle, "Contents")
-        archive_relative_binary = paths.join(
-            archive_relative_contents,
-            "MacOS",
-            bundle_info.bundle_name,
-        )
-        archive_relative_resources = paths.join(archive_relative_contents, "Resources")
+        if bundle_info.platform_type == "macos":
+            archive_relative_contents = paths.join(archive_relative_bundle, "Contents")
+            archive_relative_binary = paths.join(
+                archive_relative_contents,
+                "MacOS",
+                bundle_info.bundle_name,
+            )
+            archive_relative_resources = paths.join(archive_relative_contents, "Resources")
+        else:
+            archive_relative_contents = archive_relative_bundle
+            archive_relative_binary = paths.join(archive_relative_bundle, bundle_info.bundle_name)
+            archive_relative_resources = archive_relative_bundle
+
+        archive_short_path = archive.short_path
+        output_to_verify = archive
+        standalone_binary_short_path = ""
+    elif AppleBinaryInfo in target_under_test:
+        output_to_verify = target_under_test[AppleBinaryInfo].binary
+        standalone_binary_short_path = target_under_test[AppleBinaryInfo].binary.short_path
+        archive_short_path = ""
+        archive_relative_binary = ""
+        archive_relative_bundle = ""
+        archive_relative_contents = ""
+        archive_relative_resources = ""
     else:
         archive_relative_contents = archive_relative_bundle
         archive_relative_binary = paths.join(archive_relative_bundle, bundle_info.bundle_name)

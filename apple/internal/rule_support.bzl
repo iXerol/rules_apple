@@ -33,6 +33,7 @@ load(
 def _describe_bundle_locations(
         archive_relative = "",
         bundle_relative_contents = "",
+        contents_relative_app_clips = "AppClips",
         contents_relative_binary = "",
         contents_relative_frameworks = "Frameworks",
         contents_relative_plugins = "PlugIns",
@@ -43,6 +44,7 @@ def _describe_bundle_locations(
     return struct(
         archive_relative = archive_relative,
         bundle_relative_contents = bundle_relative_contents,
+        contents_relative_app_clips = contents_relative_app_clips,
         contents_relative_binary = contents_relative_binary,
         contents_relative_frameworks = contents_relative_frameworks,
         contents_relative_plugins = contents_relative_plugins,
@@ -206,6 +208,27 @@ _RULE_TYPE_DESCRIPTORS = {
             rpaths = [
                 # Application binaries live in Application.app/Application
                 # Frameworks are packaged in Application.app/Frameworks
+                "@executable_path/Frameworks",
+            ],
+        ),
+        # ios_app_clip
+        apple_product_type.app_clip: _describe_rule_type(
+            allowed_device_families = ["iphone", "ipad"],
+            allows_locale_trimming = True,
+            app_icon_parent_extension = ".xcassets",
+            app_icon_extension = ".appiconset",
+            archive_extension = ".ipa",
+            bundle_extension = ".app",
+            bundle_locations = _describe_bundle_locations(archive_relative = "Payload"),
+            has_launch_images = True,
+            has_settings_bundle = True,
+            is_executable = True,
+            mandatory_families = True,
+            product_type = apple_product_type.app_clip,
+            requires_pkginfo = True,
+            rpaths = [
+                # Application binaries live in AppClip.app/Application
+                # Frameworks are packaged in AppClip.app/Frameworks
                 "@executable_path/Frameworks",
             ],
         ),
