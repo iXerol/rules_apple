@@ -267,7 +267,7 @@ _RULE_TYPE_DESCRIPTORS = {
                 "-application_extension",
             ],
             mandatory_families = True,
-            product_type = apple_product_type.widgetkit_extension,
+            product_type = apple_product_type.app_extension,
             rpaths = [
                 # Extension binaries live in Application.app/PlugIns/Extension.appex/Extension
                 # Frameworks are packaged in Application.app/Frameworks
@@ -474,7 +474,7 @@ _RULE_TYPE_DESCRIPTORS = {
             bundle_extension = ".appex",
             bundle_locations = _DEFAULT_MACOS_BUNDLE_LOCATIONS,
             deps_cfg = apple_common.multi_arch_split,
-            product_type = apple_product_type.widgetkit_extension,
+            product_type = apple_product_type.app_extension,
             provisioning_profile_extension = ".provisionprofile",
             requires_signing_for_device = False,
             rpaths = [

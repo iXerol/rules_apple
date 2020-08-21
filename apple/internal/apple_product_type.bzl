@@ -35,6 +35,8 @@ type of rule being created and thus its descriptor to control behaviors.
 # * `app_extension`: A basic iOS, macOS, or tvOS application extension. This is
 #   the default product type for those targets; it can be overridden with a more
 #   specific product type if needed.
+# * `widgetkit_extension`: An WidgetKit extension for iOS or macOS application.
+#   This product type should contain a user-provided binary.
 # * `bundle`: A loadable macOS bundle. This is the default product type for
 #   `macos_bundle` targets; it can be overridden with a more specific product type
 #   if needed.
